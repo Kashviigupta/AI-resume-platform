@@ -26,8 +26,12 @@ pypdf==4.2.0
 python-docx==1.1.2
 
 # --- NLP / AI (added in Milestone 8-10) ---
-spacy==3.7.5
+# NOTE: spaCy and sentence-transformers were listed here per the original
+# tech-stack spec, but nothing in app/services actually imports them — JD
+# matching (Milestone 9) uses scikit-learn's TF-IDF + cosine similarity
+# instead. Both packages need a C++ compiler to build from source on
+# platforms without a prebuilt wheel (e.g. newer Python versions, some CI/
+# deploy environments), so they're removed here to keep installs reliable.
 nltk==3.8.1
-sentence-transformers==3.0.1
 scikit-learn==1.5.0
 google-genai>=1.0.0   # google-generativeai is deprecated; this is Google's current unified SDK
