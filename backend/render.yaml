@@ -25,7 +25,9 @@ services:
       - key: DATABASE_URL
         value: sqlite:///./resume_platform.db
       - key: JWT_SECRET_KEY
-        generateValue: true        # Render generates a random secret for you — never commit a real one
+        sync: false                # set manually in the Render dashboard (see docs/MILESTONE_12_DEPLOYMENT.md) —
+        # using "generateValue: true" here would create a NEW random secret on every
+        # blueprint sync, silently invalidating every logged-in user's session each time
       - key: JWT_ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
