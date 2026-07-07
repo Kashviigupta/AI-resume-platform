@@ -1,0 +1,57 @@
+# Render Blueprint — lets you deploy the whole backend by connecting your
+# GitHub repo and clicking "New +" -> "Blueprint" on https://dashboard.render.com,
+# instead of clicking through the "New Web Service" form by hand.
+#
+# This file must live at the REPO ROOT of whatever Render deploys, OR you can
+# point Render at this exact path when setting up the Blueprint. If your repo
+# root is the project root (containing both backend/ and frontend/), move a
+# copy of this file to the repo root, or set "rootDir: backend" as done below.
+
+services:
+  - type: web
+    name: ai-resume-platform-api
+    runtime: python
+    plan: free                     # 512 MB RAM / 0.1 CPU — fine for a student project/demo
+    region: oregon                 # pick the region closest to you/your users
+    rootDir: backend               # this service's files live in backend/, not the repo root
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./resume_platform.db
+      - key: JWT_SECRET_KEY
+        generateValue: true        # Render generates a random secret for you — never commit a real one
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: FRONTEND_ORIGIN
+        value: https://your-app-name.vercel.app   # <-- replace after you deploy the frontend (Milestone 12 step 2)
+      - key: GEMINI_API_KEY
+        sync: false                # "sync: false" = set this manually in the Render dashboard, never in git
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: UPLOAD_DIR
+        value: uploaded_resumes
+      - key: MAX_UPLOAD_SIZE_MB
+        value: "5"
+
+# ---------------------------------------------------------------------------
+# OPTIONAL — persistent disk (requires a paid "Starter" plan or higher, since
+# Render's Free web services cannot attach disks and always have an ephemeral
+# filesystem). Without a disk, your SQLite database file and uploaded resumes
+# are wiped every time the service redeploys or restarts — acceptable for a
+# demo/portfolio project, but not for real users' data. Uncomment this whole
+# block AND change `plan: free` to `plan: starter` above once you're ready to
+# pay for real persistence:
+#
+#     disk:
+#       name: resume-data
+#       mountPath: /var/data
+#       sizeGB: 1
+#
+# ...and then change DATABASE_URL and UPLOAD_DIR above to point inside it:
+#     DATABASE_URL: sqlite:////var/data/resume_platform.db
+#     UPLOAD_DIR: /var/data/uploaded_resumes
+# ---------------------------------------------------------------------------

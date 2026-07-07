@@ -1,0 +1,33 @@
+# --- Core web framework ---
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# --- Database ---
+sqlalchemy==2.0.30
+
+# --- Validation / settings ---
+# NOTE: bumped from 2.7.4/2.3.3 — google-genai (Milestone 10) needs a newer
+# pydantic internally; older pydantic raises a NameError on import otherwise.
+pydantic==2.13.4
+pydantic-settings==2.14.2
+
+# --- Auth ---
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1              # pinned: passlib 1.7.4 breaks on bcrypt>=4.1
+email-validator==2.2.0     # required by Pydantic's EmailStr type
+python-multipart==0.0.9    # required for form/file uploads
+
+# --- Env vars ---
+python-dotenv==1.0.1
+
+# --- Resume parsing (added in Milestone 6-7) ---
+pypdf==4.2.0
+python-docx==1.1.2
+
+# --- NLP / AI (added in Milestone 8-10) ---
+spacy==3.7.5
+nltk==3.8.1
+sentence-transformers==3.0.1
+scikit-learn==1.5.0
+google-genai>=1.0.0   # google-generativeai is deprecated; this is Google's current unified SDK

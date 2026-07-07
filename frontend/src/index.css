@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-paper text-ink font-body antialiased;
+}
+
+.dark body {
+  @apply bg-ink text-paper;
+}
+
+/* Signature "highlighter" underline used behind key words/scores */
+.mark-highlight {
+  background-image: linear-gradient(to bottom, transparent 60%, theme('colors.highlight') 60%);
+  padding: 0 2px;
+}
+
+.card {
+  @apply bg-white dark:bg-inkline rounded-card border border-slate-150 dark:border-inkline shadow-sm;
+}
